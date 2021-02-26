@@ -1,0 +1,15 @@
+.profile__editingAvatar-icon{
+    width: 26px;
+    height: 26px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    display: none;
+    background-image: url(../../../images/profile__editingAvatar-icon.svg);
+    background-color: transparent;
+    border: none;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    z-index: 1001;
+}

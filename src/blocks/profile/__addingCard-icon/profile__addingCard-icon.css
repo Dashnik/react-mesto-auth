@@ -1,0 +1,21 @@
+.profile__addingCard-icon {
+  width: 282px;
+  height: 50px;
+  background-color: black;
+  border: none;
+  border: 2px solid white;
+  background-image: url(../../../images/Vector.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+@media screen and (min-width: 768px) {
+  .profile__addingCard-icon {
+    width: 150px;
+  }
+}
+
+.profile__addingCard-icon:hover {
+  opacity: 0.6;
+}

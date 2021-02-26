@@ -1,0 +1,10 @@
+.elements {
+  max-width: 882px;
+  width: 89%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 282px);
+  column-gap: 18px;
+  row-gap: 18px;
+  margin: 0 auto;
+  justify-content: center; /*отцентровка элементов по центру*/
+}

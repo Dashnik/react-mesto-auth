@@ -1,0 +1,4 @@
+.card__like_active {
+  /* background: url(../../images/black_like.svg) center no-repeat; */
+  background: url(../../../../images/black_like.svg) center no-repeat;
+}

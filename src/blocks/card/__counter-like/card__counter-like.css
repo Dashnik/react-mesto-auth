@@ -1,0 +1,5 @@
+.card__counter-like {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}

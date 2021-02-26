@@ -1,0 +1,14 @@
+.popup__image {
+  max-width: 282px;
+  max-height: 282px;
+  /* max-height: 708px;
+  max-width: 708px;  
+  border: lavender 1px solid;*/
+}
+
+@media screen and (min-width: 768px) {
+  .popup__image {
+    max-height: 708px;
+    max-width: 708px;
+  }
+}

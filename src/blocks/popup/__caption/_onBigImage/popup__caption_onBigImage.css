@@ -1,0 +1,5 @@
+.popup__caption_onBigImage{
+    display: flex;
+    flex-direction:row;
+    align-self: start;
+  }

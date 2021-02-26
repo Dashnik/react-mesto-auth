@@ -1,0 +1,9 @@
+.popup_type_editing_photo_profile {
+  width: 430px;
+  height: 272px;
+  /* visibility: visible;
+  opacity: 1; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

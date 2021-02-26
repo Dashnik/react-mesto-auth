@@ -1,0 +1,11 @@
+.login__email {
+  width: 358px;
+  height: 27px;
+  background-color: #000000;
+  border:#CCCCCC; ;
+  border-bottom-style:solid;
+  color:#CCCCCC; 
+}
+
+input::-webkit-input-placeholder { color:#CCCCCC; }
+input::-moz-placeholder { color:#CCCCCC; }

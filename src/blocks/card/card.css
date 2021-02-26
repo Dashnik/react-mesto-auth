@@ -1,0 +1,16 @@
+@import url(./__title/card__title.css);
+@import url(./__like/card__like.css);
+@import url(./__body/card__body.css);
+@import url(./__delete-button/card__delete-button.css);
+@import url(./__image/card__image.css);
+@import url(./__counter-like/card__counter-like.css);
+
+.card {
+  object-fit: contain;
+  height: 361px;
+  background: #ffffff;
+  border-radius: 10px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}

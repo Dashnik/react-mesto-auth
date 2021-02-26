@@ -1,0 +1,11 @@
+.popup_type_new-cards{
+    width: 290px;
+    height: 340px;
+}
+
+@media screen and (min-width: 768px) {
+    .popup_type_new-cards {
+       height: 330px;
+      width: 430px;  
+    }
+  }  

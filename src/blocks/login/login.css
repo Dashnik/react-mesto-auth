@@ -1,0 +1,27 @@
+@import url(./__label/login__label.css);
+@import url(./__email/login__email.css);
+@import url(./__password/login__password.css);
+@import url(./__submit/login__submit.css);
+
+.login{
+    display: flex;
+    flex-direction: column;
+    max-width: 882px;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;   
+}
+
+.register__text{
+    margin-top: 15px;
+    text-decoration: none;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;    
+    text-align: center;    
+    color: #FFFFFF;
+}
+
+.register__text:hover{
+    opacity: 0.6;
+}

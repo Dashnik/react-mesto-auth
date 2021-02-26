@@ -1,0 +1,16 @@
+.header__link{
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 22px;
+    /* identical to box height, or 122% */
+    
+    text-align: right;
+    cursor: pointer;
+    color: #FFFFFF;
+    text-decoration:none;
+  }
+  
+  .header__link:hover{
+    opacity: 0.6;
+ 
+  }
