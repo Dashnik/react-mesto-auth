@@ -20,6 +20,11 @@ import Register from "./Register";
 
 import ProtectedRoute from "./ProtectedRoute"; // импортируем HOC
 import {apiRegister} from "../utils/api";
+import InfoTooltip from "./InfoTooltip";
+
+
+import Success from '../images/Success.svg';
+import Fail from '../images/Fail.svg'
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(
@@ -46,6 +51,11 @@ function App() {
   // const [isRender, setIsRender] = React.useState(false);
 
   const [loggedIn, setLoggedIn] = React.useState(false);
+  const [isRegisterSuccess, setIsRegisterSuccess] = React.useState(
+    false
+  );
+  const [isRegisterFail, setIsRegisterFail] = React.useState(true);
+
 
   React.useEffect(() => {
     Api.getInitialCards()
@@ -139,10 +149,15 @@ function App() {
   const handleRegisterUser = ({email, password})=>{
     apiRegister.register(email, password)
     .then(res => {
+    setIsRegisterPopupOpen(!isRegisterPopupOpen)
+      // setRegisterMessage(!registerMessage);
       return res
     })
-    .catch(error => console.log(error));
-
+    .catch(error => 
+      {
+        setIsRegisterPopupOpen(!isRegisterPopupOpen)
+        console.log(error);
+      })
   }
 
   const handleAuth = ({email, password})=>{
@@ -195,6 +210,8 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setIsRemoveCardPopupOpen(false);
+    setIsRegisterFail(false);
+    setIsRegisterSuccess(false);
 
     setSelectedCard({ name: "", link: "", isOpen: false });
   };
@@ -218,7 +235,6 @@ function App() {
         <ProtectedRoute path='/mesto-react/main'
         loggedIn={loggedIn}
         >
-        {/* <Route path="/mesto-react/main"> */}
           <CurrentUserContext.Provider value={currentUser}>
             <Header />
             <CardsContext.Provider value={cards}>
@@ -238,7 +254,6 @@ function App() {
               onUpdateUser={handleUpdateUser}
             />
           </CurrentUserContext.Provider>
-        {/* </Route> */}
         </ProtectedRoute>
         <Route exact path="/mesto-react">
           {loggedIn ? (
@@ -266,6 +281,20 @@ function App() {
         onRemoveCard={handleRemoveCard}
       />
       <ImagePopup onClose={closeAllPopups} card={selectedCard} />
+      <InfoTooltip 
+      isOpen={isRegisterSuccess}
+      onClose={closeAllPopups} 
+      img={Success}
+      title='Вы успешно зарегистрировались!'
+      alt='иконка успеха'
+      />
+      <InfoTooltip 
+      isOpen={isRegisterFail}
+      onClose={closeAllPopups} 
+      img={Fail}
+      title='Что-то пошло не так! Попробуйте ещё раз.'
+      alt='иконка ошибки'
+      />
     </div>
   );
 }

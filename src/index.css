@@ -21,6 +21,8 @@
 @import url(./blocks/card/__delete-button/_hidden/card__delete-button_hidden.css);
 @import url(./blocks/card/__like/_active/card__like_active.css);
 @import url(./blocks/login/login.css);
+@import url(./blocks/infoToolTip/infoToolTip.css);
+@import url(./blocks/infoToolTip/_opened/infoToolTip_opened.css);
 
 /* .card_id {
   display: none;
