@@ -67,7 +67,6 @@ class Api {
   }
 
   changeLikeCardStatus(cardId, isLiked) {
-
     if (isLiked) {
       return fetch(`${this.baseUrl}/cards/likes/${cardId}`, {
         method: "PUT",
@@ -79,8 +78,7 @@ class Api {
         .then((data) => {
           return data;
         });
-    }
-    else {
+    } else {
       return fetch(`${this.baseUrl}/cards/likes/${cardId}`, {
         method: "DELETE",
         headers: this.headers,
@@ -92,41 +90,31 @@ class Api {
           return data;
         });
     }
-
   }
 
-  register(email,password){
+  register(email, password) {
     return fetch(`${this.baseUrl}/signup`, {
-    method: "POST",
-    headers: this.headers,
-    body: JSON.stringify({email, password })
-    })
-    .then((response) => {
-      try {
-        if (response.status === 200){
-          return response.json();
-        }
-      } catch(e){
-        return (e)
-      }
+      method: "POST",
+      headers: this.headers,
+      body: JSON.stringify({ email, password }),
     })
   }
 
-  authorize(email,password){
+  authorize(email, password) {
     return fetch(`${this.baseUrl}/signin`, {
-    method: "POST",
-    headers: this.headers,
-    body: JSON.stringify({email, password })
-    })
-    .then((response) => {
+      method: "POST",
+      headers: this.headers,
+      body: JSON.stringify({ email, password }),
+    }).then((response) => {
       try {
-        if (response.status === 200){
+        // if (response.status === 200) {
+          if (response.status === 201 || 204) {
           return response.json();
         }
-      } catch(e){
-        return (e)
+      } catch (e) {
+        return e;
       }
-    })
+    });
   }
 }
 

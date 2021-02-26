@@ -1,6 +1,4 @@
 import React from "react";
-// import Success from '../images/Success.svg';
-// import Fail from '../images/Fail.svg'
 
 function InfoTooltip(props) {
   return (

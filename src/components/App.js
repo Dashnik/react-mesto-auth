@@ -54,7 +54,7 @@ function App() {
   const [isRegisterSuccess, setIsRegisterSuccess] = React.useState(
     false
   );
-  const [isRegisterFail, setIsRegisterFail] = React.useState(true);
+  const [isRegisterFail, setIsRegisterFail] = React.useState(false);
 
 
   React.useEffect(() => {
@@ -149,13 +149,18 @@ function App() {
   const handleRegisterUser = ({email, password})=>{
     apiRegister.register(email, password)
     .then(res => {
-    setIsRegisterPopupOpen(!isRegisterPopupOpen)
-      // setRegisterMessage(!registerMessage);
-      return res
-    })
+      console.log(res);
+      if(res.status ===201){
+         setIsRegisterSuccess(!isRegisterSuccess);
+      }
+     else{
+      setIsRegisterFail(!isRegisterFail)
+     }
+      }
+    )
     .catch(error => 
       {
-        setIsRegisterPopupOpen(!isRegisterPopupOpen)
+       
         console.log(error);
       })
   }
