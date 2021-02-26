@@ -19,6 +19,7 @@ import Login from "./Login";
 import Register from "./Register";
 
 import ProtectedRoute from "./ProtectedRoute"; // импортируем HOC
+import {apiRegister} from "../utils/api";
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(
@@ -42,7 +43,7 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState("");
   const [cards, setCards] = React.useState([]);
   const [currentRemoveCard, setCurrentRemoveCard] = React.useState([]);
-  const [isRender, setIsRender] = React.useState(false);
+  // const [isRender, setIsRender] = React.useState(false);
 
   const [loggedIn, setLoggedIn] = React.useState(false);
 
@@ -119,10 +120,10 @@ function App() {
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
   };
 
-  const handleRendering = () => {
-    setIsRender(!isRender);
-    console.log(isRender);
-  };
+  // const handleRendering = () => {
+  //   setIsRender(!isRender);
+  //   console.log(isRender);
+  // };
 
   const handleUpdateUser = ({ name, about }) => {
     Api.setNewProfile({ name, about })
@@ -135,10 +136,27 @@ function App() {
       });
   };
 
-  const handleUpdateAvatar = (link) => {
-    //handleRendering();
+  const handleRegisterUser = ({email, password})=>{
+    apiRegister.register(email, password)
+    .then(res => {
+      return res
+    })
+    .catch(error => console.log(error));
 
-    ///console.log('hi');
+  }
+
+  const handleAuth = ({email, password})=>{
+    
+    apiRegister.authorize(email, password)
+    .then(res => {
+      return res
+    })
+    .catch(error => console.log(error));
+
+  }
+
+  const handleUpdateAvatar = (link) => {
+
     Api.setUserAvatar(link)
       .then((data) => {
         setCurrentUser(data);
@@ -147,8 +165,6 @@ function App() {
       .catch((error) => {
         console.log(error);
       });
-
-    //setIsRender(false);
   };
 
   const handleAddPlaceSubmit = (newCard) => {
@@ -191,13 +207,13 @@ function App() {
           linkName='Регистрация'
           link='/mesto-react/sign-up'
            />
-          <Login />
+          <Login onLogin={handleAuth} />
         </Route>
         <Route path="/mesto-react/sign-up">
         <Header linkName='Войти' 
         link='/mesto-react/sign-in'
         />
-          <Register />
+          <Register onRegister={handleRegisterUser}/>
         </Route>
         <ProtectedRoute path='/mesto-react/main'
         loggedIn={loggedIn}
@@ -241,7 +257,7 @@ function App() {
         onClose={closeAllPopups}
         isOpen={isEditAvatarPopupOpen}
         onUpdateAvatar={handleUpdateAvatar}
-        isRender={isRender}
+        // isRender={isRender}
       />
       <RemoveCardPopup
         onClose={closeAllPopups}

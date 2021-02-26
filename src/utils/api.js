@@ -95,8 +95,39 @@ class Api {
 
   }
 
+  register(email,password){
+    return fetch(`${this.baseUrl}/signup`, {
+    method: "POST",
+    headers: this.headers,
+    body: JSON.stringify({email, password })
+    })
+    .then((response) => {
+      try {
+        if (response.status === 200){
+          return response.json();
+        }
+      } catch(e){
+        return (e)
+      }
+    })
+  }
 
-
+  authorize(email,password){
+    return fetch(`${this.baseUrl}/signin`, {
+    method: "POST",
+    headers: this.headers,
+    body: JSON.stringify({email, password })
+    })
+    .then((response) => {
+      try {
+        if (response.status === 200){
+          return response.json();
+        }
+      } catch(e){
+        return (e)
+      }
+    })
+  }
 }
 
 const apiPraktikum = new Api({
@@ -110,31 +141,9 @@ const apiPraktikum = new Api({
 export default apiPraktikum;
 
 
-
-// duckAuth.js
-
-export const BASE_URL = 'https://auth.nomoreparties.co';
-
-export const register = (email,password ) => {
-  return fetch(`${BASE_URL}/auth/local/register`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({email, password })
-  })
-  .then((response) => {
-    try {
-      if (response.status === 200){
-        return response.json();
-      }
-    } catch(e){
-      return (e)
-    }
-  })
-  .then((res) => {
-    return res;
-  })
-  .catch((err) => console.log(err));
-};
+export const apiRegister = new Api({
+  baseUrl: "https://auth.nomoreparties.co",
+  headers: {
+    "Content-Type": "application/json",
+  },
+})
