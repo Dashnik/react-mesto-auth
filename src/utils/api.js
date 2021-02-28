@@ -97,7 +97,7 @@ class Api {
       method: "POST",
       headers: this.headers,
       body: JSON.stringify({ email, password }),
-    })
+    });
   }
 
   authorize(email, password) {
@@ -108,7 +108,7 @@ class Api {
     }).then((response) => {
       try {
         // if (response.status === 200) {
-          if (response.status === 201 || 204) {
+        if (response.status === 201 || 204) {
           return response.json();
         }
       } catch (e) {
@@ -116,6 +116,27 @@ class Api {
       }
     });
   }
+
+  getContent(jwt) {
+    return fetch(`${this.baseUrl}/users/me`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${jwt}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => data);
+  }
+
+    Test(token){
+      return fetch(`${this.baseUrl}/users/me`, {
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${localStorage.getItem(`${token}`)}`,
+        },
+      })
+    }
 
 }
 

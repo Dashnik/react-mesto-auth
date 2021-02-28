@@ -158,26 +158,38 @@ function App() {
       });
   };
 
-  const handleAuth = ({ email, password, _id }) => {
+  // const handleAuth = ({ email, password, _id }) => {
+  //   apiRegister
+  //     .authorize(email, password)
+  //     .then((data) => {
+  //       localStorage.setItem("token", data.token);
+
+  //       // отправляем запрос на роут аутентификации
+  //       fetch("https://auth.nomoreparties.co/users/me", {
+  //         method: "GET",
+  //         headers: {
+  //           authorization: `Bearer ${localStorage.getItem("token")}`,
+  //         },
+  //       }).then(() => {
+  //         setLoggedIn(!loggedIn);
+  //         history.push("/mesto-react/main");
+  //       });
+  //     })
+
+  //     .catch((error) => console.log(error));
+  // };
+
+
+  const handleAuth = ({ email, password }) => {
     apiRegister
       .authorize(email, password)
       .then((data) => {
         localStorage.setItem("token", data.token);
 
         // отправляем запрос на роут аутентификации
-        fetch("https://auth.nomoreparties.co/users/me", {
-          method: "GET",
-          headers: {
-            authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }).then((res) => {
-          console.log(res);
-          console.log(data);
-          console.log(email);
-          console.log(_id);
+       apiRegister.Test(data.token).then(() => {
           setLoggedIn(!loggedIn);
           history.push("/mesto-react/main");
-          console.log(loggedIn);
         });
       })
 
@@ -188,29 +200,24 @@ function App() {
     // если у пользователя есть токен в localStorage,
     // эта функция проверит валидность токена
     const jwt = localStorage.getItem("jwt");
+    // проверим токен
     if (jwt) {
-      // проверим токен
-      duckAuth.getContent(jwt).then((res) => {
-        if (res) {
-          // авторизуем пользователя
-          this.setState(
-            {
-              loggedIn: true,
-            },
-            () => {
-              // обернём App.js в withRouter
-              // так, что теперь есть доступ к этому методу
-              this.props.history.push("/ducks");
-            }
-          );
-        }
-      });
+      apiRegister.getContent(jwt)
+        .then((res)=>{
+          if (res){
+            setLoggedIn(true);
+            history.push("/mesto-react/main");
+          }
+        })
+        // .then(res => res.json())
+        // .then(data => data)
+      
     }
   };
 
-  // useEffect(() =>{
-  //   setLoggedIn();
-  // }, [])
+  React.useEffect(() =>{
+    tokenCheck();
+  }, [])
 
   const handleUpdateAvatar = (link) => {
     Api.setUserAvatar(link)
