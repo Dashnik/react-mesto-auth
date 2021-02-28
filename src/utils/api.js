@@ -116,6 +116,7 @@ class Api {
       }
     });
   }
+
 }
 
 const apiPraktikum = new Api({
@@ -135,3 +136,5 @@ export const apiRegister = new Api({
     "Content-Type": "application/json",
   },
 })
+
+

@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
-//import PopupWithForm from './PopupWithForm';
 import ImagePopup from "./ImagePopup";
 
 import Api from "../utils/api.js";
@@ -14,11 +13,11 @@ import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import RemoveCardPopup from "./RemoveCardPopup";
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch, useHistory } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
 
-import ProtectedRoute from "./ProtectedRoute"; // импортируем HOC
+import ProtectedRoute  from "./ProtectedRoute"; // импортируем HOC
 import {apiRegister} from "../utils/api";
 import InfoTooltip from "./InfoTooltip";
 
@@ -55,6 +54,7 @@ function App() {
     false
   );
   const [isRegisterFail, setIsRegisterFail] = React.useState(false);
+  const history = useHistory();
 
 
   React.useEffect(() => {
@@ -149,9 +149,10 @@ function App() {
   const handleRegisterUser = ({email, password})=>{
     apiRegister.register(email, password)
     .then(res => {
-      console.log(res);
+    
       if(res.status ===201){
          setIsRegisterSuccess(!isRegisterSuccess);
+         history.push("/mesto-react/sign-in");
       }
      else{
       setIsRegisterFail(!isRegisterFail)
@@ -164,16 +165,60 @@ function App() {
         console.log(error);
       })
   }
+  
 
-  const handleAuth = ({email, password})=>{
-    
-    apiRegister.authorize(email, password)
-    .then(res => {
-      return res
-    })
-    .catch(error => console.log(error));
 
+  const handleAuth = ({ email, password, _id }) => {
+    apiRegister
+      .authorize(email, password)
+      .then((data) => {
+        localStorage.setItem("token", data.token);
+
+        // отправляем запрос на роут аутентификации
+        fetch("https://auth.nomoreparties.co/users/me", {
+          method: "GET",
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }).then((res) => {
+          console.log(res);
+          console.log(data);
+          console.log(email);
+          console.log(_id);
+          setLoggedIn(!loggedIn);
+          history.push("/mesto-react/main");
+          console.log(loggedIn);
+        });
+      })
+
+      .catch((error) => console.log(error));
+  };
+
+  const tokenCheck = ()=> {
+    // если у пользователя есть токен в localStorage,
+    // эта функция проверит валидность токена
+      const jwt = localStorage.getItem('jwt');
+    if (jwt){
+      // проверим токен
+      duckAuth.getContent(jwt).then((res) => {
+        if (res){
+                  // авторизуем пользователя
+          this.setState({
+            loggedIn: true,
+          }, () => {
+                      // обернём App.js в withRouter
+                      // так, что теперь есть доступ к этому методу
+            this.props.history.push("/ducks");
+          });
+        }
+      }); 
+    }
   }
+
+
+    // useEffect(() =>{
+    //   setLoggedIn();
+    // }, [])
 
   const handleUpdateAvatar = (link) => {
 
@@ -222,9 +267,12 @@ function App() {
   };
 
   return (
+    <CurrentUserContext.Provider value={currentUser}>
+         <CardsContext.Provider value={cards}>
     <div className="page">
+
       <Switch>
-        <Route path="/mesto-react/sign-in">
+      <Route  path="/mesto-react/sign-in">
           <Header 
           linkName='Регистрация'
           link='/mesto-react/sign-up'
@@ -238,11 +286,11 @@ function App() {
           <Register onRegister={handleRegisterUser}/>
         </Route>
         <ProtectedRoute path='/mesto-react/main'
-        loggedIn={loggedIn}
-        >
-          <CurrentUserContext.Provider value={currentUser}>
-            <Header />
-            <CardsContext.Provider value={cards}>
+         loggedIn={loggedIn}
+         component={Main}
+         >
+            <Header linkName='Выйти' 
+        link='/mesto-react/sign-in' />
               <Main
                 handleCardClick={handleCardClick}
                 onEditProfile={handleEditProfileClick}
@@ -251,23 +299,22 @@ function App() {
                 handleCardLike={handleCardLike}
                 handleCardDelete={handleCardDelete}
               />
-            </CardsContext.Provider>
-            <Footer />
+            {/* <Footer /> */}
             <EditProfilePopup
               onClose={closeAllPopups}
               isOpen={isEditProfilePopupOpen}
               onUpdateUser={handleUpdateUser}
             />
-          </CurrentUserContext.Provider>
         </ProtectedRoute>
-        <Route exact path="/mesto-react">
+        <Route path="/mesto-react">
           {loggedIn ? (
-            <Redirect to="/mesto-react/sign-in" />
+            <Redirect to="/mesto-react/main" />
           ) : (
-            <Redirect to="/mesto-react/sign-up" />
+            <Redirect to="/mesto-react/sign-in" />
           )}
         </Route>
       </Switch>
+      <Footer />
       <AddPlacePopup
         onClose={closeAllPopups}
         isOpen={isAddPlacePopupOpen}
@@ -301,6 +348,8 @@ function App() {
       alt='иконка ошибки'
       />
     </div>
+    </CardsContext.Provider>
+    </CurrentUserContext.Provider>
   );
 }
 
