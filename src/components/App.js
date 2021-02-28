@@ -17,13 +17,12 @@ import { Redirect, Route, Switch, useHistory } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
 
-import ProtectedRoute  from "./ProtectedRoute"; // импортируем HOC
-import {apiRegister} from "../utils/api";
+import ProtectedRoute from "./ProtectedRoute"; // импортируем HOC
+import { apiRegister } from "../utils/api";
 import InfoTooltip from "./InfoTooltip";
 
-
-import Success from '../images/Success.svg';
-import Fail from '../images/Fail.svg'
+import Success from "../images/Success.svg";
+import Fail from "../images/Fail.svg";
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(
@@ -50,12 +49,9 @@ function App() {
   // const [isRender, setIsRender] = React.useState(false);
 
   const [loggedIn, setLoggedIn] = React.useState(false);
-  const [isRegisterSuccess, setIsRegisterSuccess] = React.useState(
-    false
-  );
+  const [isRegisterSuccess, setIsRegisterSuccess] = React.useState(false);
   const [isRegisterFail, setIsRegisterFail] = React.useState(false);
   const history = useHistory();
-
 
   React.useEffect(() => {
     Api.getInitialCards()
@@ -146,27 +142,21 @@ function App() {
       });
   };
 
-  const handleRegisterUser = ({email, password})=>{
-    apiRegister.register(email, password)
-    .then(res => {
-    
-      if(res.status ===201){
-         setIsRegisterSuccess(!isRegisterSuccess);
-         history.push("/mesto-react/sign-in");
-      }
-     else{
-      setIsRegisterFail(!isRegisterFail)
-     }
-      }
-    )
-    .catch(error => 
-      {
-       
-        console.log(error);
+  const handleRegisterUser = ({ email, password }) => {
+    apiRegister
+      .register(email, password)
+      .then((res) => {
+        if (res.status === 201) {
+          setIsRegisterSuccess(!isRegisterSuccess);
+          history.push("/mesto-react/sign-in");
+        } else {
+          setIsRegisterFail(!isRegisterFail);
+        }
       })
-  }
-  
-
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const handleAuth = ({ email, password, _id }) => {
     apiRegister
@@ -194,34 +184,35 @@ function App() {
       .catch((error) => console.log(error));
   };
 
-  const tokenCheck = ()=> {
+  const tokenCheck = () => {
     // если у пользователя есть токен в localStorage,
     // эта функция проверит валидность токена
-      const jwt = localStorage.getItem('jwt');
-    if (jwt){
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
       // проверим токен
       duckAuth.getContent(jwt).then((res) => {
-        if (res){
-                  // авторизуем пользователя
-          this.setState({
-            loggedIn: true,
-          }, () => {
-                      // обернём App.js в withRouter
-                      // так, что теперь есть доступ к этому методу
-            this.props.history.push("/ducks");
-          });
+        if (res) {
+          // авторизуем пользователя
+          this.setState(
+            {
+              loggedIn: true,
+            },
+            () => {
+              // обернём App.js в withRouter
+              // так, что теперь есть доступ к этому методу
+              this.props.history.push("/ducks");
+            }
+          );
         }
-      }); 
+      });
     }
-  }
+  };
 
-
-    // useEffect(() =>{
-    //   setLoggedIn();
-    // }, [])
+  // useEffect(() =>{
+  //   setLoggedIn();
+  // }, [])
 
   const handleUpdateAvatar = (link) => {
-
     Api.setUserAvatar(link)
       .then((data) => {
         setCurrentUser(data);
@@ -268,87 +259,74 @@ function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-         <CardsContext.Provider value={cards}>
-    <div className="page">
-
-      <Switch>
-      <Route  path="/mesto-react/sign-in">
-          <Header 
-          linkName='Регистрация'
-          link='/mesto-react/sign-up'
-           />
-          <Login onLogin={handleAuth} />
-        </Route>
-        <Route path="/mesto-react/sign-up">
-        <Header linkName='Войти' 
-        link='/mesto-react/sign-in'
-        />
-          <Register onRegister={handleRegisterUser}/>
-        </Route>
-        <ProtectedRoute path='/mesto-react/main'
-         loggedIn={loggedIn}
-         component={Main}
-         >
-            <Header linkName='Выйти' 
-        link='/mesto-react/sign-in' />
-              <Main
-                handleCardClick={handleCardClick}
-                onEditProfile={handleEditProfileClick}
-                onEditAvatar={handleEditAvatarClick}
-                onAddPlace={handleAddPlaceClick}
-                handleCardLike={handleCardLike}
-                handleCardDelete={handleCardDelete}
-              />
-            {/* <Footer /> */}
-            <EditProfilePopup
-              onClose={closeAllPopups}
-              isOpen={isEditProfilePopupOpen}
-              onUpdateUser={handleUpdateUser}
-            />
-        </ProtectedRoute>
-        <Route path="/mesto-react">
-          {loggedIn ? (
-            <Redirect to="/mesto-react/main" />
-          ) : (
-            <Redirect to="/mesto-react/sign-in" />
-          )}
-        </Route>
-      </Switch>
-      <Footer />
-      <AddPlacePopup
-        onClose={closeAllPopups}
-        isOpen={isAddPlacePopupOpen}
-        onCreateCard={handleAddPlaceSubmit}
-      />
-      <EditAvatarPopup
-        onClose={closeAllPopups}
-        isOpen={isEditAvatarPopupOpen}
-        onUpdateAvatar={handleUpdateAvatar}
-        // isRender={isRender}
-      />
-      <RemoveCardPopup
-        onClose={closeAllPopups}
-        isOpen={isRemoveCardPopupOpen}
-        cardId={currentRemoveCard}
-        onRemoveCard={handleRemoveCard}
-      />
-      <ImagePopup onClose={closeAllPopups} card={selectedCard} />
-      <InfoTooltip 
-      isOpen={isRegisterSuccess}
-      onClose={closeAllPopups} 
-      img={Success}
-      title='Вы успешно зарегистрировались!'
-      alt='иконка успеха'
-      />
-      <InfoTooltip 
-      isOpen={isRegisterFail}
-      onClose={closeAllPopups} 
-      img={Fail}
-      title='Что-то пошло не так! Попробуйте ещё раз.'
-      alt='иконка ошибки'
-      />
-    </div>
-    </CardsContext.Provider>
+      <CardsContext.Provider value={cards}>
+        <div className="page">
+          <Switch>
+            <Route path="/mesto-react/sign-in">
+              <Login onLogin={handleAuth} />
+            </Route>
+            <Route path="/mesto-react/sign-up">
+              <Register onRegister={handleRegisterUser} />
+            </Route>
+            <ProtectedRoute
+              path="/mesto-react/main"
+              loggedIn={loggedIn}
+              component={Main}
+              handleCardClick={handleCardClick}
+              onEditProfile={handleEditProfileClick}
+              onEditAvatar={handleEditAvatarClick}
+              onAddPlace={handleAddPlaceClick}
+              handleCardLike={handleCardLike}
+              handleCardDelete={handleCardDelete}
+            ></ProtectedRoute>
+            <Route path="/mesto-react">
+              {loggedIn ? (
+                <Redirect to="/mesto-react/main" />
+              ) : (
+                <Redirect to="/mesto-react/sign-in" />
+              )}
+            </Route>
+          </Switch>
+          <Footer />
+          <EditProfilePopup
+            onClose={closeAllPopups}
+            isOpen={isEditProfilePopupOpen}
+            onUpdateUser={handleUpdateUser}
+          />
+          <AddPlacePopup
+            onClose={closeAllPopups}
+            isOpen={isAddPlacePopupOpen}
+            onCreateCard={handleAddPlaceSubmit}
+          />
+          <EditAvatarPopup
+            onClose={closeAllPopups}
+            isOpen={isEditAvatarPopupOpen}
+            onUpdateAvatar={handleUpdateAvatar}
+            // isRender={isRender}
+          />
+          <RemoveCardPopup
+            onClose={closeAllPopups}
+            isOpen={isRemoveCardPopupOpen}
+            cardId={currentRemoveCard}
+            onRemoveCard={handleRemoveCard}
+          />
+          <ImagePopup onClose={closeAllPopups} card={selectedCard} />
+          <InfoTooltip
+            isOpen={isRegisterSuccess}
+            onClose={closeAllPopups}
+            img={Success}
+            title="Вы успешно зарегистрировались!"
+            alt="иконка успеха"
+          />
+          <InfoTooltip
+            isOpen={isRegisterFail}
+            onClose={closeAllPopups}
+            img={Fail}
+            title="Что-то пошло не так! Попробуйте ещё раз."
+            alt="иконка ошибки"
+          />
+        </div>
+      </CardsContext.Provider>
     </CurrentUserContext.Provider>
   );
 }

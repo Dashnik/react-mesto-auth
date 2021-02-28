@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Header from "./Header";
 
 function Login(props) {
 
@@ -23,6 +23,10 @@ function Login(props) {
 
   return (
       <>
+         <Header 
+          linkName='Регистрация'
+          link='/mesto-react/sign-up'
+           />
         <form 
         className='login'
         onSubmit={handlesubmit}>

@@ -1,10 +1,12 @@
 import React from "react";
 import Card from "./Card";
 import { CurrentUserContext, CardsContext } from "../contexts/CurrentUserContext";
+import Header from "./Header";
 
 function Main(props) {
   const currentUser = React.useContext(CurrentUserContext);
-  const cardsContextTest = React.useContext(CardsContext);
+  const currentCards = React.useContext(CardsContext);
+
 
 
   function handleClick(cardLink, cardName) {
@@ -13,6 +15,8 @@ function Main(props) {
 
   return (
     <>
+      <Header linkName='Выйти' 
+        link='/mesto-react/sign-in' />
       <main className="content">
         <section className="profile">
           <div className="profile__photo_container">
@@ -49,7 +53,7 @@ function Main(props) {
           </div>
         </section>
         <section className="elements">
-          {cardsContextTest.map((card) => (
+          {currentCards.map((card) => (
             <Card
               onCardClick={handleClick}
               onCardLike={props.handleCardLike}

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
+import Header from "./Header";
 
 function Register(props) {
 
@@ -25,6 +25,9 @@ function Register(props) {
 
   return (
     <>
+       <Header linkName='Войти' 
+        link='/mesto-react/sign-in'
+        />
       <form 
       className="login"
       onSubmit={handlesubmit}
