@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import Header from "./Header";
+//import Header from "./Header";
 import Main from "./Main";
-import Footer from "./Footer";
+// import Footer from "./Footer";
 import ImagePopup from "./ImagePopup";
 
 import Api from "../utils/api.js";
@@ -158,28 +158,6 @@ function App() {
       });
   };
 
-  // const handleAuth = ({ email, password, _id }) => {
-  //   apiRegister
-  //     .authorize(email, password)
-  //     .then((data) => {
-  //       localStorage.setItem("token", data.token);
-
-  //       // отправляем запрос на роут аутентификации
-  //       fetch("https://auth.nomoreparties.co/users/me", {
-  //         method: "GET",
-  //         headers: {
-  //           authorization: `Bearer ${localStorage.getItem("token")}`,
-  //         },
-  //       }).then(() => {
-  //         setLoggedIn(!loggedIn);
-  //         history.push("/mesto-react/main");
-  //       });
-  //     })
-
-  //     .catch((error) => console.log(error));
-  // };
-
-
   const handleAuth = ({ email, password }) => {
     apiRegister
       .authorize(email, password)
@@ -187,7 +165,7 @@ function App() {
         localStorage.setItem("token", data.token);
 
         // отправляем запрос на роут аутентификации
-       apiRegister.Test(data.token).then(() => {
+       apiRegister.keepToken(data.token).then(() => {
           setLoggedIn(!loggedIn);
           history.push("/mesto-react/main");
         });
@@ -199,7 +177,7 @@ function App() {
   const tokenCheck = () => {
     // если у пользователя есть токен в localStorage,
     // эта функция проверит валидность токена
-    const jwt = localStorage.getItem("jwt");
+    const jwt = localStorage.getItem("token");
     // проверим токен
     if (jwt) {
       apiRegister.getContent(jwt)
@@ -209,8 +187,6 @@ function App() {
             history.push("/mesto-react/main");
           }
         })
-        // .then(res => res.json())
-        // .then(data => data)
       
     }
   };
@@ -218,6 +194,7 @@ function App() {
   React.useEffect(() =>{
     tokenCheck();
   }, [])
+
 
   const handleUpdateAvatar = (link) => {
     Api.setUserAvatar(link)
@@ -294,7 +271,7 @@ function App() {
               )}
             </Route>
           </Switch>
-          <Footer />
+          {/* <Footer /> */}
           <EditProfilePopup
             onClose={closeAllPopups}
             isOpen={isEditProfilePopupOpen}

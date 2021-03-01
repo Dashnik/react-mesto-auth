@@ -129,7 +129,7 @@ class Api {
       .then((data) => data);
   }
 
-    Test(token){
+    keepToken(token){
       return fetch(`${this.baseUrl}/users/me`, {
         method: "GET",
         headers: {

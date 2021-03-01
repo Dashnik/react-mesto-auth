@@ -2,6 +2,7 @@ import React from "react";
 import Card from "./Card";
 import { CurrentUserContext, CardsContext } from "../contexts/CurrentUserContext";
 import Header from "./Header";
+import Footer from "./Footer";
 
 function Main(props) {
   const currentUser = React.useContext(CurrentUserContext);
@@ -64,6 +65,7 @@ function Main(props) {
           ))}
         </section>
       </main>
+      <Footer />
     </>
   );
 }
