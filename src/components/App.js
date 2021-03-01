@@ -142,35 +142,68 @@ function App() {
       });
   };
 
+  // const handleRegisterUser = ({ email, password }) => {
+  //   apiRegister
+  //     .register(email, password)
+  //     .then((res) => {
+  //       console.log(res);
+  //       if (res.status === 201) {
+  //         setIsRegisterSuccess(!isRegisterSuccess);
+  //         history.push("/mesto-react/sign-in");
+  //       } else {
+  //         setIsRegisterFail(!isRegisterFail);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log('hi');
+  //       console.log(error);
+  //     });
+  // };
+
   const handleRegisterUser = ({ email, password }) => {
     apiRegister
       .register(email, password)
-      .then((res) => {
-        if (res.status === 201) {
-          setIsRegisterSuccess(!isRegisterSuccess);
-          history.push("/mesto-react/sign-in");
-        } else {
-          setIsRegisterFail(!isRegisterFail);
-        }
+      .then(() => {
+        setIsRegisterSuccess(!isRegisterSuccess);
+        history.push("/mesto-react/sign-in");
       })
       .catch((error) => {
         console.log(error);
+        setIsRegisterFail(!isRegisterFail);
       });
   };
+
+  // const handleAuth = ({ email, password }) => {
+  //   apiRegister
+  //     .authorize(email, password)
+  //     .then((data) => {
+   
+  //       localStorage.setItem("token", data.token);
+
+  //       // отправляем запрос на роут аутентификации
+  //      apiRegister.keepToken(data.token)
+  //      .then(() => {
+  //         setLoggedIn(!loggedIn);
+  //         history.push("/mesto-react/main");
+  //       });
+  //     })
+  //     .catch((error) => console.log(error));
+  // };
 
   const handleAuth = ({ email, password }) => {
     apiRegister
       .authorize(email, password)
       .then((data) => {
+   
         localStorage.setItem("token", data.token);
 
         // отправляем запрос на роут аутентификации
-       apiRegister.keepToken(data.token).then(() => {
+       apiRegister.getContent(data.token)
+       .then(() => {
           setLoggedIn(!loggedIn);
           history.push("/mesto-react/main");
         });
       })
-
       .catch((error) => console.log(error));
   };
 
@@ -271,7 +304,6 @@ function App() {
               )}
             </Route>
           </Switch>
-          {/* <Footer /> */}
           <EditProfilePopup
             onClose={closeAllPopups}
             isOpen={isEditProfilePopupOpen}
