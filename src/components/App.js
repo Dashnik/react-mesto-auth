@@ -8,6 +8,7 @@ import Api from "../utils/api.js";
 import {
   CurrentUserContext,
   CardsContext,
+  UserEmailContext,
 } from "../contexts/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
@@ -52,6 +53,7 @@ function App() {
   const [isRegisterSuccess, setIsRegisterSuccess] = React.useState(false);
   const [isRegisterFail, setIsRegisterFail] = React.useState(false);
   const history = useHistory();
+  const [userEmail, setUserEmail] = React.useState("");
 
   React.useEffect(() => {
     Api.getInitialCards()
@@ -160,6 +162,8 @@ function App() {
   //     });
   // };
 
+ 
+
   const handleRegisterUser = ({ email, password }) => {
     apiRegister
       .register(email, password)
@@ -190,19 +194,15 @@ function App() {
   //     .catch((error) => console.log(error));
   // };
 
+ 
+
   const handleAuth = ({ email, password }) => {
     apiRegister
       .authorize(email, password)
       .then((data) => {
-   
         localStorage.setItem("token", data.token);
-
-        // отправляем запрос на роут аутентификации
-       apiRegister.getContent(data.token)
-       .then(() => {
-          setLoggedIn(!loggedIn);
-          history.push("/mesto-react/main");
-        });
+        setUserEmail(email);
+        tokenCheck();
       })
       .catch((error) => console.log(error));
   };
@@ -273,10 +273,11 @@ function App() {
 
     setSelectedCard({ name: "", link: "", isOpen: false });
   };
-
+  
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <CardsContext.Provider value={cards}>
+      <UserEmailContext.Provider value={userEmail}>
         <div className="page">
           <Switch>
             <Route path="/mesto-react/sign-in">
@@ -342,6 +343,7 @@ function App() {
             alt="иконка ошибки"
           />
         </div>
+        </UserEmailContext.Provider>
       </CardsContext.Provider>
     </CurrentUserContext.Provider>
   );
