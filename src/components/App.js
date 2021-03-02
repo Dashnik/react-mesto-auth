@@ -8,7 +8,6 @@ import Api from "../utils/api.js";
 import {
   CurrentUserContext,
   CardsContext,
-  UserEmailContext,
 } from "../contexts/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
@@ -128,11 +127,6 @@ function App() {
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
   };
 
-  // const handleRendering = () => {
-  //   setIsRender(!isRender);
-  //   console.log(isRender);
-  // };
-
   const handleUpdateUser = ({ name, about }) => {
     Api.setNewProfile({ name, about })
       .then((userData) => {
@@ -143,26 +137,6 @@ function App() {
         console.log(error);
       });
   };
-
-  // const handleRegisterUser = ({ email, password }) => {
-  //   apiRegister
-  //     .register(email, password)
-  //     .then((res) => {
-  //       console.log(res);
-  //       if (res.status === 201) {
-  //         setIsRegisterSuccess(!isRegisterSuccess);
-  //         history.push("/mesto-react/sign-in");
-  //       } else {
-  //         setIsRegisterFail(!isRegisterFail);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log('hi');
-  //       console.log(error);
-  //     });
-  // };
-
- 
 
   const handleRegisterUser = ({ email, password }) => {
     apiRegister
@@ -177,30 +151,14 @@ function App() {
       });
   };
 
-  // const handleAuth = ({ email, password }) => {
-  //   apiRegister
-  //     .authorize(email, password)
-  //     .then((data) => {
-   
-  //       localStorage.setItem("token", data.token);
-
-  //       // отправляем запрос на роут аутентификации
-  //      apiRegister.keepToken(data.token)
-  //      .then(() => {
-  //         setLoggedIn(!loggedIn);
-  //         history.push("/mesto-react/main");
-  //       });
-  //     })
-  //     .catch((error) => console.log(error));
-  // };
-
- 
-
   const handleAuth = ({ email, password }) => {
     apiRegister
       .authorize(email, password)
       .then((data) => {
         localStorage.setItem("token", data.token);
+
+        localStorage.setItem("email", email);
+
         setUserEmail(email);
         tokenCheck();
       })
@@ -277,7 +235,6 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <CardsContext.Provider value={cards}>
-      <UserEmailContext.Provider value={userEmail}>
         <div className="page">
           <Switch>
             <Route path="/mesto-react/sign-in">
@@ -343,7 +300,6 @@ function App() {
             alt="иконка ошибки"
           />
         </div>
-        </UserEmailContext.Provider>
       </CardsContext.Provider>
     </CurrentUserContext.Provider>
   );

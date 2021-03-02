@@ -99,26 +99,9 @@ class Api {
       body: JSON.stringify({ email, password }),
     })
     .then((response) => {
-      console.log(response);
       return this._getResponseData(response);
     });
   }
-
-  // authorize(email, password) {
-  //   return fetch(`${this.baseUrl}/signin`, {
-  //     method: "POST",
-  //     headers: this.headers,
-  //     body: JSON.stringify({ email, password }),
-  //   }).then((response) => {
-  //     try {
-  //       if (response.status === 201 || 204) {
-  //         return response.json();
-  //       }
-  //     } catch (e) {
-  //       return e;
-  //     }
-  //   });
-  // }
 
   authorize(email, password) {
     return fetch(`${this.baseUrl}/signin`, {
@@ -139,15 +122,6 @@ class Api {
       },
     }).then((response) => {
       return this._getResponseData(response);
-    });
-  }
-
-  keepToken(token) {
-    return fetch(`${this.baseUrl}/users/me`, {
-      method: "GET",
-      headers: {
-        authorization: `Bearer ${localStorage.getItem(`${token}`)}`,
-      },
     });
   }
 }

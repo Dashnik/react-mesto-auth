@@ -1,20 +1,7 @@
 @import url(./__logo/header__logo.css);
 @import url(./__link/header__link.css);
-
-/* .header {
-  width: 99%;
-  margin-top: 0;
-  margin-bottom: 43px;
-  max-width: 882px;
-  margin-left: auto;
-  margin-right: auto;
-  border-bottom: 1px;
-  border-color: #545454;
-  border-bottom-style: solid;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-} */
+@import url(./__email/header__email.css);
+@import url(./__container/header__container.css);
 
 .header {
   width: 99%;
@@ -38,3 +25,4 @@
     margin-bottom: 40px;
   }
 }
+

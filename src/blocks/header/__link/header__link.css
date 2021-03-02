@@ -8,6 +8,9 @@
     cursor: pointer;
     color: #FFFFFF;
     text-decoration:none;
+    background-color:#000000;
+    border: 0;
+    padding: 0;
   }
   
   .header__link:hover{

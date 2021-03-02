@@ -1,18 +1,25 @@
 import React from 'react';
 import logo from '../images/header-logo.jpg';
-import { Link } from "react-router-dom";
-import {  UserEmailContext } from "../contexts/CurrentUserContext";
-
+import { useHistory } from "react-router-dom";
 
 function Header(props) {
 
-  const currentEmail = React.useContext(UserEmailContext);
+  const history = useHistory();
+  const email = localStorage.getItem('email');
+
+  const signOut = () =>{
+    history.push(`${props.link}`);
+    localStorage.removeItem('email');
+    localStorage.removeItem('token');
+  }
 
   return (
     <header className="header">
       <img className="header__logo" src={logo} alt="логотип проекта Mesto" />
-      <p className='header__link'>{currentEmail} </p>
-      <Link className='header__link' to={props.link} >{props.linkName}</Link>
+      <div className='header__container'>
+        <p className='header__email'>{email} </p>
+        <button className='header__link' onClick={signOut} >{props.linkName}</button>
+      </div>
     </header>
   );
 }
