@@ -91,39 +91,6 @@ class Api {
         });
     }
   }
-
-  register(email, password) {
-    return fetch(`${this.baseUrl}/signup`, {
-      method: "POST",
-      headers: this.headers,
-      body: JSON.stringify({ email, password }),
-    })
-    .then((response) => {
-      return this._getResponseData(response);
-    });
-  }
-
-  authorize(email, password) {
-    return fetch(`${this.baseUrl}/signin`, {
-      method: "POST",
-      headers: this.headers,
-      body: JSON.stringify({ email, password }),
-    }).then((response) => {
-      return this._getResponseData(response);
-    });
-  }
-
-  getContent(jwt) {
-    return fetch(`${this.baseUrl}/users/me`, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${jwt}`,
-      },
-    }).then((response) => {
-      return this._getResponseData(response);
-    });
-  }
 }
 
 const apiPraktikum = new Api({
@@ -137,11 +104,5 @@ const apiPraktikum = new Api({
 export default apiPraktikum;
 
 
-export const apiRegister = new Api({
-  baseUrl: "https://auth.nomoreparties.co",
-  headers: {
-    "Content-Type": "application/json",
-  },
-})
 
 

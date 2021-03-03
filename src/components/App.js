@@ -1,10 +1,7 @@
-import React, { useEffect } from "react";
-//import Header from "./Header";
+import React from "react";
 import Main from "./Main";
-// import Footer from "./Footer";
 import ImagePopup from "./ImagePopup";
-
-import Api from "../utils/api.js";
+import apiPraktikum from "../utils/api.js";
 import {
   CurrentUserContext,
   CardsContext,
@@ -18,7 +15,7 @@ import Login from "./Login";
 import Register from "./Register";
 
 import ProtectedRoute from "./ProtectedRoute"; // импортируем HOC
-import { apiRegister } from "../utils/api";
+import { apiAuth } from "../utils/auth.js";
 import InfoTooltip from "./InfoTooltip";
 
 import Success from "../images/Success.svg";
@@ -52,10 +49,9 @@ function App() {
   const [isRegisterSuccess, setIsRegisterSuccess] = React.useState(false);
   const [isRegisterFail, setIsRegisterFail] = React.useState(false);
   const history = useHistory();
-  const [userEmail, setUserEmail] = React.useState("");
 
   React.useEffect(() => {
-    Api.getInitialCards()
+    apiPraktikum.getInitialCards()
       .then((data) => {
         setCards(
           data.map((item) => ({
@@ -73,7 +69,7 @@ function App() {
   }, []);
 
   React.useEffect(() => {
-    Api.getProfileInfo()
+    apiPraktikum.getProfileInfo()
       .then((data) => {
         setCurrentUser(data);
       })
@@ -97,11 +93,10 @@ function App() {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
 
     // Отправляем запрос в API и получаем обновлённые данные карточки
-    Api.changeLikeCardStatus(card._id, !isLiked)
+    apiPraktikum.changeLikeCardStatus(card._id, !isLiked)
       .then((newCard) => {
         // Формируем новый массив на основе имеющегося, подставляя в него новую карточку
         const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
-
         // Обновляем стейт
         setCards(newCards);
       })
@@ -128,7 +123,7 @@ function App() {
   };
 
   const handleUpdateUser = ({ name, about }) => {
-    Api.setNewProfile({ name, about })
+    apiPraktikum.setNewProfile({ name, about })
       .then((userData) => {
         setCurrentUser(userData);
         closeAllPopups();
@@ -139,7 +134,7 @@ function App() {
   };
 
   const handleRegisterUser = ({ email, password }) => {
-    apiRegister
+    apiAuth
       .register(email, password)
       .then(() => {
         setIsRegisterSuccess(!isRegisterSuccess);
@@ -152,14 +147,14 @@ function App() {
   };
 
   const handleAuth = ({ email, password }) => {
-    apiRegister
+    apiAuth
       .authorize(email, password)
       .then((data) => {
         localStorage.setItem("token", data.token);
 
         localStorage.setItem("email", email);
 
-        setUserEmail(email);
+        //setUserEmail(email);
         tokenCheck();
       })
       .catch((error) => console.log(error));
@@ -171,14 +166,13 @@ function App() {
     const jwt = localStorage.getItem("token");
     // проверим токен
     if (jwt) {
-      apiRegister.getContent(jwt)
-        .then((res)=>{
-          if (res){
-            setLoggedIn(true);
-            history.push("/mesto-react/main");
-          }
-        })
-      
+      apiAuth.getContent(jwt).then((res) => {
+        if (res) {
+          setLoggedIn(true);
+          history.push("/mesto-react/main");
+        }
+      })
+      .catch(error => console.log(error));
     }
   };
 
@@ -188,7 +182,7 @@ function App() {
 
 
   const handleUpdateAvatar = (link) => {
-    Api.setUserAvatar(link)
+    apiPraktikum.setUserAvatar(link)
       .then((data) => {
         setCurrentUser(data);
         closeAllPopups();
@@ -199,26 +193,28 @@ function App() {
   };
 
   const handleAddPlaceSubmit = (newCard) => {
-    Api.postCardOnTheServer(newCard)
+    apiPraktikum.postCardOnTheServer(newCard)
       .then((newElement) => {
         setCards([newElement, ...cards]);
+        closeAllPopups();
       })
       .catch((error) => {
         console.log(error);
       });
-    closeAllPopups();
+    // closeAllPopups();
   };
 
   const handleRemoveCard = (cardId) => {
-    Api.deleteCard(cardId)
+    apiPraktikum.deleteCard(cardId)
       .then(() => {
         const newCards = cards.filter((r) => (r._id === cardId ? "" : r));
         setCards(newCards);
+        closeAllPopups();
       })
       .catch((error) => {
         console.log(error);
       });
-    closeAllPopups();
+    // closeAllPopups();
   };
 
   const closeAllPopups = () => {
@@ -228,7 +224,6 @@ function App() {
     setIsRemoveCardPopupOpen(false);
     setIsRegisterFail(false);
     setIsRegisterSuccess(false);
-
     setSelectedCard({ name: "", link: "", isOpen: false });
   };
   
