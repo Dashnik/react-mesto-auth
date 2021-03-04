@@ -4,22 +4,32 @@ import Header from "./Header";
 
 function Register(props) {
 
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  // const [email, setEmail] = React.useState('');
+  // const [password, setPassword] = React.useState('');
+
+  const [values, setValues] = React.useState({});
 
   function handlesubmit(e) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
 
     // Передаём значения управляемых компонентов во внешний обработчик
-    props.onRegister({ email, password });
+    //props.onRegister({ email, password });
+    props.onRegister(values.register__email, values.register__pwd);
   }
 
   const handleChange = (e) => {
 
-    e.target.name === 'register__email' ? setEmail(e.target.value) : ''
+    const target = e.target;
+    const name = target.name;
+    const value = target.value;
 
-    e.target.name === 'register__pwd' ? setPassword(e.target.value) : ''
+    setValues({...values, 
+    [name]:value
+    });
+    // e.target.name === 'register__email' ? setEmail(e.target.value) : ''
+
+    // e.target.name === 'register__pwd' ? setPassword(e.target.value) : ''
   }
 
 

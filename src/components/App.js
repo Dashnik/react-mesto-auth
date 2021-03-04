@@ -133,7 +133,8 @@ function App() {
       });
   };
 
-  const handleRegisterUser = ({ email, password }) => {
+  const handleRegisterUser = ( email, password ) => {
+
     apiAuth
       .register(email, password)
       .then(() => {
@@ -146,7 +147,8 @@ function App() {
       });
   };
 
-  const handleAuth = ({ email, password }) => {
+  // const handleAuth = ({ email, password }) => {
+    const handleAuth = ( email, password ) => {
     apiAuth
       .authorize(email, password)
       .then((data) => {
@@ -154,7 +156,6 @@ function App() {
 
         localStorage.setItem("email", email);
 
-        //setUserEmail(email);
         tokenCheck();
       })
       .catch((error) => console.log(error));
@@ -193,6 +194,7 @@ function App() {
   };
 
   const handleAddPlaceSubmit = (newCard) => {
+ 
     apiPraktikum.postCardOnTheServer(newCard)
       .then((newElement) => {
         setCards([newElement, ...cards]);

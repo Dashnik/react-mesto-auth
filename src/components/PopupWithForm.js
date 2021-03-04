@@ -5,7 +5,6 @@ function PopupWithForm(props) {
   return (
     <form
       className={`popup  ${props.isOpen}`}
-      // className={`popup  ${props.isOpen}`}
       name={props.name}
       noValidate
       onSubmit={props.handleSubmit}

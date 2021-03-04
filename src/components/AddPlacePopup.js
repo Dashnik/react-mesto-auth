@@ -3,13 +3,17 @@ import PopupWithForm from './PopupWithForm';
 
 function AddPlacePopup(props) {
 
-  const [name, setName] = React.useState('');
-  const [link, setLink] = React.useState('');
+  const [values, setValues] = React.useState({});
 
   const handleChange = (e) => {
 
-     e.target.name === 'popup__name' ? setName(e.target.value) : '';
-     e.target.name === 'popup__description' ? setLink(e.target.value) : '';
+    const target = e.target;
+    const name = target.name;
+    const value = target.value;
+
+    setValues({...values,
+    [name]: value
+    })
 
   };
 
@@ -18,12 +22,11 @@ function AddPlacePopup(props) {
     e.preventDefault();
 
     /** Передаём значения управляемых компонентов во внешний обработчик*/
-    props.onCreateCard({
-        name,
-        link: link,
+      props.onCreateCard({
+       name: values.popup__name,
+        link: values.popup__description,
     });
-    setName('');
-    setLink('');
+ 
     
   }
 
@@ -38,8 +41,7 @@ function AddPlacePopup(props) {
         >
         <input
         type="text"
-        value={name}
-        id="profile-name"
+       // id="profile-name"
         name="popup__name"
         className="popup__input popup__item_profile_name"
         minLength="2"
@@ -49,8 +51,7 @@ function AddPlacePopup(props) {
       />   
       <input
         type="text"
-        value={link}
-        id="profile-job"
+        //id="profile-job"
         name="popup__description"
         className="popup__input popup__item_profile_job"
         minLength="2"
